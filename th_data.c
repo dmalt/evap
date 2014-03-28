@@ -28,10 +28,13 @@ double Fi1(double xi, double T, double In) {
  return p;
 }
 
-double Fi2(double T) {
- double HL=1000.*(1-0.006468*T)/(0.004003-0.000024*T);
- if(T>Tc || HL<=0.1) HL=0.1;
- return 1.+(14230.*Te-1670.*T)/(HL+1670.*(T-Tcp));
+double Fi2(double T) {   //Функция считает кси
+  //Рассчитываем теплоту парообразования для заданной температуры
+ double HL=1000.*(1-0.006468*T)/(0.003909-0.000022*T);  //Тут наверное нужно поправить, чтобы лишний раз не считалось зря
+ if(T>Tc || HL<=0.1) HL=0.1;   
+ double cpe=14230., cpw=1670.; //Здесь cpe вообще-то нужно задавать извне;cpw нужно рассчитывать
+ double xi=1.+(cpe*Te-cpw*T)/(HL+cpw*(T-Tcp));                       
+ return xi;
 }
 
 double CritRes(double xi, double In) {
@@ -42,7 +45,7 @@ double CritRes(double xi, double In) {
 }
 
 double GetRes(double T, double *ex, double In) {
- *ex=log(Fi2(T));
+ *ex=log(Fi2(T));  // Посчитали кси
  return Fi1(*ex,T,In);
 }
 
@@ -52,11 +55,11 @@ int GetResultSub(double *xi, double *T, double In) {
  double x0,x1,dx0,dx1;
  double dT=0.1;
  r0=GetRes(x0=*T,xi,In);
- x1=x0-(dx0=dT);
+ x1=x0-(dx0=dT);                    //Зачем?
  do {
-  r1=GetRes(x1,xi,In);
+  r1=GetRes(x1,xi,In);  //Здесь x1 выступает в роли температуры
   dx1=r1*(x1-x0)/(r1-r0);
-  if(x1-dx1<0.5*x1) dx1=0.5*x1;
+  if(x1-dx1<0.5*x1) dx1=0.5*x1;     //И это что за костыль?
   ++it;
 //  printf("it=%d x0=%e x1=%e r0=%e r1=%e dx=%e\n",it,x0,x1,r0,r1,dx1);
   x0=x1;r0=r1;x1-=dx1;dx0=dx1;
@@ -91,15 +94,16 @@ double Ain[IN],Xis[IN],Tes[IN];
 int IT[IN];
 
 int main(void) {
- int k,it,ince;
- double xi=2.,T=150.,In=10.,di=Inmax/(IN-1.);
- for(k=0,ince=0;k<IN;k++) {
-  In=k*di;Ain[k]=In;
-  if(!ince) {
+ int k,it,ince=0;
+ double xi=2.,T=150.,In=10. ,di=Inmax/(IN-1.);  //xi - это переменная кси, равная интегралу от Пекле. В нашей системе уравнений выступает в роли неизвестной
+ for(k=0;k<IN;k++) {                   //В цикле меняем параметр In
+  In=k*di;Ain[k]=In;                                                        //Какая-то ерунда
+  if(!ince) {                                                               //Реализуется две ветки расчета - до- и сверхкритическая 
+    //Функция GetResultSub меняет значения 
    IT[k]=GetResultSub(&xi,&T,In);Xis[k]=xi;Tes[k]=T;
-   if(T>=Tc) ince=1;
+   if(T>=Tc) ince=1;                                                        // Переход в сверхкритическую ветку расчета 
   }
-  if(ince) {
+  if(ince) {                                                                // Сверхкритическая ветка
    IT[k]=GetResultCrit(&xi,&T,In);Xis[k]=xi;Tes[k]=T;
   }
  }
@@ -107,7 +111,7 @@ int main(void) {
 
  printf("Result= [\n");
  for(k=0;k<IN;k++) {
-  printf(" %15.10f %15.10f %15.10f %d;\n",Ain[k],Xis[k],Tes[k], IT[k]);
+  printf(" %15.10f %15.10f %15.10f;\n",Ain[k],Xis[k],Tes[k]);
  }
  printf("];\n\n");
 
