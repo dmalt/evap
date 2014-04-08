@@ -1,0 +1,21 @@
+[main] Evaporation 1000 (0) exception: trapped!
+[main] Evaporation 1000 (0) exception: code 0xC0000005 at 0x6105AFE2
+[main] Evaporation 1000 (0) exception: ax 0x0 bx 0xA0312B8 cx 0x40CF4000 dx 0x0
+[main] Evaporation 1000 (0) exception: si 0x90 di 0xA031270 bp 0x246FC8C sp 0x246FC60
+[main] Evaporation 1000 (0) exception: exception is: STATUS_ACCESS_VIOLATION
+[main] Evaporation 1000 (0) stack: Stack trace:
+[main] Evaporation 1000 (0) stack: frame 0: sp = 0x246F850, pc = 0x6100A2C3
+[main] Evaporation 1000 (0) stack: frame 1: sp = 0x246F88C, pc = 0x7C9037BF
+[main] Evaporation 1000 (0) stack: frame 2: sp = 0x246F8B0, pc = 0x7C90378B
+[main] Evaporation 1000 (0) stack: frame 3: sp = 0x246F960, pc = 0x7C90EAFA
+[main] Evaporation 1000 (0) stack: frame 4: sp = 0x246FC8C, pc = 0x6101A4A7
+[main] Evaporation 1000 (0) stack: frame 5: sp = 0x246FC9C, pc = 0x40D9C7
+[main] Evaporation 1000 (0) stack: frame 6: sp = 0x246FD24, pc = 0x40120E
+[main] Evaporation 1000 (0) stack: frame 7: sp = 0x246FD34, pc = 0x4014A2
+[main] Evaporation 1000 (0) stack: frame 8: sp = 0x246FDE0, pc = 0x61004402
+[main] Evaporation 1000 (0) stack: frame 9: sp = 0x246FF88, pc = 0x61004420
+[main] Evaporation 1000 (0) stack: frame 10: sp = 0x246FF94, pc = 0x41354E
+[main] Evaporation 1000 (0) stack: frame 11: sp = 0x246FFA4, pc = 0x40103A
+[main] Evaporation 1000 (0) stack: frame 12: sp = 0x246FFC0, pc = 0x7C816F97
+[main] Evaporation 1000 (0) stack: frame 13: sp = 0x246FFF0, pc = 0x0
+[main] Evaporation 1000 (0) stack: End of stack trace
