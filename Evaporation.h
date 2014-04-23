@@ -10,7 +10,7 @@ private:
 	short CN; 			// Число компонент
 	double * Cp; 		// Теплоемкости компонент
 
-	double Tc; 			// Критическая температура для кислорода
+	double T_c;			// Критическая температура для кислорода
 	double T_ex;		// Температура на бесконечности
 	double T_av;		// Средняя температура капли
 
@@ -25,6 +25,8 @@ private:
 	/************** FUNCTIONS **************/
 	double GetCp_mixt_ex(); // Расчет теплоемкости смеси на бесконечности
 	double GetCp_mixt_w();	// Расчет теплоемкости смеси на границе
+	double GetVapHeat();	// Расчет теплоемкости парообразования в зависимости от температуры
+	double GetXi();			// Расчет кси
 public:
 	Evaporation(double *, double, double);
 	~Evaporation();
