@@ -30,10 +30,14 @@ Evaporation::Evaporation(double * ExtConc, double ExtTemp, double ExtPressure){
 
 	T_ex 	= ExtTemp;
 	P_ex 	= ExtPressure;
-/****************Теплоемкости компонент*************/
+/*******************Теплоемкости компонент******************/
 	Cp[H2]	=	16000.;	Cp[O2]	=	1670.;	Cp[N2]	=	1300;
 	Cp[H2O]	=	0.; 	Cp[OH]	=	0.;		Cp[H]	=	0.;
 	Cp[O]	=	0.; 	Cp[HO2]	=	0.; 	Cp[H2O2]=	0.;
+/******************Молярные массы компонент*****************/
+	mu[H2]	=	2.e-3;		mu[O2]	=	32.e-3;	mu[N2]	=	28.e-3;
+	mu[H2O]	=	18.e-3; 	mu[OH]	=	17.e-3;	mu[H]	=	1.e-3;
+	mu[O]	=	16.e-3; 	mu[HO2]	=	33.e-3; mu[H2O2]=	34.e-3;
 
 }
 
@@ -79,16 +83,30 @@ double Evaporation::GetXi(double T){
 
 /*********Расчет дисбаланса уравнения для температуры*******/
 double Evaporation::GetDelta(double T){
-	return T*T;
+	double delta;
+	double xi     = GetXi(T);
+	double exi    = exp(-xi);
+	double Y_O2_w = 1 - (1 - Y_ex[O2])*exp(-xi);
+	double mu_e   = GetMolarMassEx();
+	double IN     = 0.1;											// IN - внешний параметр и его надо бы посчитать.
+	double Cpe    = GetCp_mixt_ex();
+	double Cpw    = GetCp_mixt_w();
+	double Gamma  = 1.;												// Эту гамму нужно посчитать, хотя вроде бы она примерно равна 1
+	double XN = GetO2PartPres(T) / P_ex;							// Давление насыщенных паров кислорода, обезразмеренное на внешнее давление
+
+	double mu_w_divby_mu_O2 = 1/(1 - (1 - mu_e/mu[O2]) * exi);
+
+	delta = Y_O2_w * mu_w_divby_mu_O2;									// Добавили к функции дисбаланса левую часть уравнения (15)
+	delta+= xi * IN * sqrt(T * Cpw * mu_w_divby_mu_O2 * Gamma / (Cpe * T_ex));
+	delta-= XN;
+	return delta;
 }
 
 double Evaporation::GetO2PartPres(double T){
 	double A[4] = {-1649810., 79239., -1252., 6.5};
 	double P_O2 = 0;
 	for (int i = 0; i < 4; ++i)
-	{
 		P_O2+=A[i] * pow(T,i);
-	}
 	return P_O2;
 }
 
@@ -116,6 +134,14 @@ int Evaporation::SolveNewton(){
 	cout<<endl;
 	T_w = T_next;
 	return iter;
+}
+
+double Evaporation::GetMolarMassEx(){
+	double mu_e=0;
+	for (int i = 0; i < CN; ++i)
+		mu_e+=Y_ex[i]/mu[i];
+	mu_e = 1./mu_e;
+	return mu_e;
 }
 
 int main(int argc, char  *argv[])
