@@ -19,12 +19,12 @@ double pow(double val, int pow){
 }
 
 
-Evaporation::Evaporation(double * ExtConc, double ExtTemp, double ExtPressure){
+Evaporation::Evaporation(double * ExtConc, double ExtTemp, double ExtPressure, double T_dropplet){
 /*****************Число компонент*******************/
 	CN=9;							
 /*********Критическа температура для кислорода******/
 	T_c = 154.77; 		
-	T_av = 100.;				
+	T_av = T_dropplet;				
 /*********Выделение памяти под массивы**************/
 	Y_ex	= new double[CN];			
 	Cp 		= new double[CN]; 			 
@@ -189,8 +189,8 @@ int main(int argc, char  *argv[])
 			else if(i == H2) Ye[i] = 0.8;
 			else Ye[i] = 0;
 		}
-	double Te = 160., Pe = 5066250;
-	Evaporation dropplet(Ye, Te, Pe);
+	double Te = 160., Pe = 5066250, Tav = 100.;
+	Evaporation dropplet(Ye, Te, Pe, Tav);
 	int iter = dropplet.SolveNewton();
 	cout<<"In "<<iter <<" iterations we`ve got T equal to "<<dropplet.T_w<<endl;
 	return 0;
