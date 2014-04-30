@@ -73,7 +73,7 @@ double Evaporation::GetCp_mixt_w(){
 	for (int i = 0; i < CN; ++i)
 		GetCp_mixt_w+=Y_w[i]*Cp[i];
 	return GetCp_mixt_w;
-	// return 14230.;
+	
 }
 
 /***Расчет тепла парообразования для заданной температуры на поверхности капли***/
@@ -118,11 +118,11 @@ double Evaporation::GetDelta(double T){
 	double XN = GetO2PartPres(T) / P_ex;						// Давление насыщенных паров кислорода, обезразмеренное на внешнее давление
 
 	double mu_w_divby_mu_O2 = 1/(1 - (1 - mu[O2]/mu_e) * exi);
-	// double mu_w_divby_mu_O2 = 1/(1 + 15*(1 - Y_ex[O2]) * exi);
+	
 
 	delta = Y_O2_w * mu_w_divby_mu_O2;									// Добавили к функции дисбаланса левую часть уравнения (15)
 	double add = xi * IN * sqrt(T * Cpw * mu_w_divby_mu_O2 * Gamma / (Cpe * T_ex));
-	// double add = xi * IN *sqrt((0.117358/T_ex)*T/(1.+15*(1-Y_ex[O2])*exi));
+	
 
 	if(DEBUG == 1){
 		cout<<"add = "<<add<<endl<<"T= "<<T<<endl<<"Cpw = "<<Cpw<<endl<<"Cpe="<<Cpe<<endl<<"mu_div = "<<mu_w_divby_mu_O2<<endl; 
