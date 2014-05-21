@@ -151,8 +151,8 @@ double Evaporation::GetO2PartPres(double T){
 int Evaporation::SolveNewton(){
 	double T_next, T_prev, f_prime, f_next, f_prev;
 	double dT = 0.1, df;
-	T_prev = 200;				// Начальное
-	T_next = T_prev - dT;     	// приближение
+	T_prev = 200.;				// Начальное приближение.
+	T_next = T_prev - dT;     	// Критично, что оно такое.
 	int iter = 0;
 	const double a_tol = 1.e-5;
 	do{
