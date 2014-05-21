@@ -29,7 +29,7 @@ private:
 
 public:
 	double T_w;			// Температура на границе
-	Evaporation(double * ExtConc, double ExtTemp, double ExtPres);
+	Evaporation(double * ExtConc, double ExtTemp, double ExtPres, double T_dropplet);
 	~Evaporation();
 	int	SolveNewton();		// Расчет температуры методом Ньютона; возвращает число итераций
 };
