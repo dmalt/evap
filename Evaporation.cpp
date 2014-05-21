@@ -115,7 +115,7 @@ double Evaporation::GetDelta(double T){
 	// }
 	double Y_O2_w = 1 - (1 - Y_ex[O2])*exi;
 	double mu_e   = GetMolarMassEx();
-	double IN     = 10.;											// IN - внешний параметр и его надо бы посчитать.
+	double IN     = 9.;											// IN - внешний параметр и его надо бы посчитать.
 	double Cpe    = GetCp_mixt_ex();
 	double Cpw    = GetCp_mixt_w();
 	double Gamma  = 1.;											// Эту гамму нужно посчитать, хотя вроде бы она примерно равна 1
@@ -151,7 +151,7 @@ double Evaporation::GetO2PartPres(double T){
 int Evaporation::SolveNewton(){
 	double T_next, T_prev, f_prime, f_next, f_prev;
 	double dT = 0.1, df;
-	T_prev = T_ex;				// Начальное
+	T_prev = 200;				// Начальное
 	T_next = T_prev - dT;     	// приближение
 	int iter = 0;
 	const double a_tol = 1.e-5;
@@ -195,7 +195,7 @@ int main(int argc, char  *argv[])
 			else Ye[i] = 0;
 		}
 
-	double Te = 160., Pe = 5066250, Tav = 100.;
+	double Te = 100., Pe = 5066250, Tav = 60.;
 	Evaporation dropplet(Ye, Te, Pe, Tav);
 
 	int iter = dropplet.SolveNewton();
