@@ -5,7 +5,15 @@
 		[
 			[
 				"T_",
-				"T_ex"
+				"T_prev"
+			],
+			[
+				"T",
+				"T_prev"
+			],
+			[
+				"Get",
+				"GetDelta"
 			],
 			[
 				"inc",
@@ -14,10 +22,6 @@
 			[
 				"in",
 				"include"
-			],
-			[
-				"T",
-				"T_next"
 			],
 			[
 				"f",
@@ -66,10 +70,6 @@
 			[
 				"mu",
 				"mu_e"
-			],
-			[
-				"Get",
-				"GetXi"
 			],
 			[
 				"x_",
@@ -159,7 +159,7 @@
 			"file": "Evaporation.cpp",
 			"settings":
 			{
-				"buffer_size": 6181,
+				"buffer_size": 5547,
 				"line_ending": "Windows"
 			}
 		},
@@ -184,7 +184,7 @@
 			"settings":
 			{
 				"buffer_size": 1325,
-				"line_ending": "Unix"
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -611,7 +611,7 @@
 	],
 	"find":
 	{
-		"height": 35.0
+		"height": 34.0
 	},
 	"find_in_files":
 	{
@@ -626,6 +626,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"приближение",
+			"T_next",
 			"IN",
 			"new",
 			"In",
@@ -751,9 +753,7 @@
 			"упрощают",
 			"pace",
 			"minutes",
-			"int",
-			"страха",
-			"затянувшегося"
+			"int"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -793,15 +793,28 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6181,
+						"buffer_size": 5547,
 						"regions":
 						{
+							"bookmarks":
+							{
+								"flags": 144,
+								"icon": "bookmark",
+								"regions":
+								[
+									[
+										3006,
+										3006
+									]
+								],
+								"scope": "bookmarks"
+							}
 						},
 						"selection":
 						[
 							[
-								273,
-								273
+								3021,
+								3021
 							]
 						],
 						"settings":
@@ -810,7 +823,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1026.0,
+						"translation.y": 2736.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -829,8 +842,8 @@
 						"selection":
 						[
 							[
-								987,
-								838
+								1135,
+								1135
 							]
 						],
 						"settings":
@@ -839,7 +852,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 216.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -864,8 +877,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								3658,
+								3658
 							]
 						],
 						"settings":
@@ -875,7 +888,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 231.0,
+						"translation.y": 1674.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -942,7 +955,7 @@
 		"cols":
 		[
 			0.0,
-			0.787590592973,
+			0.6425,
 			1.0
 		],
 		"rows":
@@ -954,7 +967,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 100.0
+		"height": 340.0
 	},
 	"output.find_results":
 	{
