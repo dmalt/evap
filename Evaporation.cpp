@@ -1,7 +1,7 @@
 #include "iostream"
 #include "Evaporation.h"
 #include "math.h"
-#define DEBUG 1
+#define DEBUG 0
 using namespace std;
 
 enum{H2,O2,N2,H2O,OH,H,O,HO2,H2O2,	EC};     //
@@ -19,9 +19,10 @@ double pow(double val, int pow){
 }
 
 
-Evaporation::Evaporation(double * ExtConc, double ExtTemp, double ExtPressure, double T_dropplet){
+Evaporation::Evaporation(double * ExtConc, double ExtTemp, double ExtPressure, double T_dropplet, double In){
 /*****************Число компонент*******************/
-	CN=9;							
+	CN=9;		
+	IN = In;					
 /*********Критическа температура для кислорода******/
 	T_c = 154.77; 		
 
@@ -90,8 +91,10 @@ double Evaporation::GetVapHeat(double T){
 /******************Расчет кси************************/
 double Evaporation::GetXi(double T){
 	double xi;
-	double Cpe 	=	GetCp_mixt_ex();
-	double Cpw 	=	GetCp_mixt_w();
+	// double Cpe 	=	GetCp_mixt_ex();
+	// double Cpw 	=	GetCp_mixt_w();
+	double Cpe 	=	7950.;
+	double Cpw 	=	7950.;
 	double HL	=	GetVapHeat(T);
 	if(DEBUG) cout<<"GetXi:"<<(Cpe*T_ex-Cpw*T)<<" "<<(HL+Cpw*(T-T_av))<<" HL="<<HL<<endl;
 	xi=log(1.+(Cpe*T_ex-Cpw*T)/(HL+Cpw*(T-T_av)));
@@ -115,7 +118,7 @@ double Evaporation::GetDelta(double T){
 	}
 	double Y_O2_w = 1 - (1 - Y_ex[O2])*exi;
 	double mu_e   = GetMolarMassEx();
-	double IN     = 0.1;											// IN - внешний параметр и его надо бы посчитать.
+	// double IN     = 5.1;											// IN - внешний параметр и его надо бы посчитать.
 	double Cpe    = GetCp_mixt_ex();
 	double Cpw    = GetCp_mixt_w();
 	double Gamma  = 1.;											// Эту гамму нужно посчитать, хотя вроде бы она примерно равна 1
@@ -195,10 +198,11 @@ int main(int argc, char  *argv[])
 			else Ye[i] = 0;
 		}
 
-	double Te = 140., Pe = 5066250, Tav = 90.;
-	Evaporation dropplet(Ye, Te, Pe, Tav);
-
-	int iter = dropplet.SolveNewton();
-	cout<<"In "<<iter <<" iterations we`ve got T equal to "<<dropplet.T_w<<endl;
+	double Te = 170., Pe = 5066250, Tav = 90.;
+	for (double In = 0.; In < 100; In += 1.){
+		Evaporation dropplet(Ye, Te, Pe, Tav,In);
+		int iter = dropplet.SolveNewton();
+		cout<<"In "<<iter <<" iterations we`ve got T equal to "<<dropplet.T_w<<endl;
+	}
 	return 0;
 }
