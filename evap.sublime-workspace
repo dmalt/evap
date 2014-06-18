@@ -179,7 +179,7 @@
 			"file": "Evaporation.cpp",
 			"settings":
 			{
-				"buffer_size": 5673,
+				"buffer_size": 5729,
 				"line_ending": "Windows"
 			}
 		},
@@ -195,7 +195,7 @@
 			"file": "test.cpp",
 			"settings":
 			{
-				"buffer_size": 146,
+				"buffer_size": 263,
 				"line_ending": "Windows"
 			}
 		}
@@ -492,6 +492,7 @@
 	},
 	"file_history":
 	[
+		"/C/Documents and Settings/Admin/Мои документы/Dropbox/Documents/Diploma/evaporation/Code_Nikitin/out.txt",
 		"/C/Documents and Settings/Admin/Мои документы/Dropbox/Documents/Diploma/evaporation/Code_Nikitin/Evaporation_old.cpp",
 		"/C/Documents and Settings/Admin/Мои документы/Dropbox/Documents/Diploma/evaporation/Code_Nikitin/test_XN.cpp",
 		"/C/Documents and Settings/Admin/214/256/250 /244/256/252/343/254/245/255/342/353/Dropbox/Documents/Diploma/evaporation/Code_Nikitin/Evaporation_old.cpp",
@@ -618,8 +619,7 @@
 		"/home/dmalt/Documents/Praсticum/sourse/ga.c",
 		"/home/dmalt/Documents/Praсticum/sourse/data.h",
 		"/home/dmalt/Documents/Praсticum/sourse/gases.c",
-		"/home/dmalt/Documents/Praсticum/sourse/gases.h",
-		"/home/dmalt/tex/b.tex"
+		"/home/dmalt/Documents/Praсticum/sourse/gases.h"
 	],
 	"find":
 	{
@@ -825,7 +825,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -834,15 +834,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5673,
+						"buffer_size": 5729,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5673,
-								5673
+								5303,
+								5303
 							]
 						],
 						"settings":
@@ -851,7 +851,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3720.0,
+						"translation.y": 3661.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -893,7 +893,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 146,
+						"buffer_size": 263,
 						"regions":
 						{
 						},
@@ -912,7 +912,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]

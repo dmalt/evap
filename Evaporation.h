@@ -14,7 +14,7 @@ private:
 	double * Y_w;		// Массив концентраций на границе
 
 	double P_ex;		// Внешнее давление
-	double IN;
+	double IN;			// Параметр неравновесности
 
 	
 	double Peclet;		// Число Пекле
