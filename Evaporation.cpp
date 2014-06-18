@@ -199,7 +199,7 @@ int main(int argc, char  *argv[])
 		}
 
 	double Te = 170., Pe = 5066250, Tav = 90.;
-	for (double In = 0.; In < 100; In += 1.){
+	for (double In = 0.; In < 1000.; In += 1.){
 		Evaporation dropplet(Ye, Te, Pe, Tav,In);
 		int iter = dropplet.SolveNewton();
 		cout<<"In "<<iter <<" iterations we`ve got T equal to "<<dropplet.T_w<<endl;
