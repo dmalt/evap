@@ -2,6 +2,7 @@
 #include "iostream"
 #include "Evaporation.h"
 #include "math.h"
+#include <iomanip>
 #define DEBUG 0
 using namespace std;
 
@@ -192,6 +193,9 @@ int main(int argc, char  *argv[])
 {	
 	ofstream out;
 	out.open("out.txt");
+	out.precision(5);
+	 	
+	out<<endl;
 	int CN = 9;
 	double * Ye=new double[CN];
 		for (int i = 0; i < CN; ++i)
@@ -202,11 +206,24 @@ int main(int argc, char  *argv[])
 		}
 
 	double Te = 170., Pe = 5066250, Tav = 90.;
-	for (double In = 0.; In < 100.; In += 1.){
+
+	for (double In = 0.; In < 1000.; In += 1.){
 		Evaporation dropplet(Ye, Te, Pe, Tav,In);
 		int iter = dropplet.SolveNewton();
 		cout<<"In "<<iter <<" iterations we`ve got T equal to "<<dropplet.T_w<<endl;
-		out<<In <<"		"<<dropplet.T_w<<endl;
+		out.width(4);
+		out<<""<<In;
+		out.width(8);
+		out<<"\t"<<dropplet.T_w<<"\t";
+		out<<"\t"<<Te<<"\t";
+		// out.width(7);
+		for (int i = 0; i < CN; ++i){
+			// out.precision(3);
+			 out.width(4);	
+
+			out<< dropplet.Y_w[i]<<"\t";
+		}
+		out<<endl;
 	}
 	out.close();
 	return 0;
