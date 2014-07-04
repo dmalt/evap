@@ -21,14 +21,14 @@ double pow(double val, int pow){
 }
 
 
-Evaporation::Evaporation(double * ExtConc, double ExtTemp, double ExtPressure, double T_dropplet, double In){
+Evaporation::Evaporation(double * ExtConc, double ExtTemp, double ExtPressure, double T_droplet, double In){
 /*****************Число компонент*******************/
 	CN=9;		
 	IN = In;					
 /*********Критическа температура для кислорода******/
 	T_c = 154.77; 		
 
-	T_av = T_dropplet;				
+	T_av = T_droplet;				
 
 /*********Выделение памяти под массивы**************/
 	Y_ex	= new double[CN];			
@@ -88,28 +88,37 @@ double Evaporation::GetVapHeat(double T){
 	double HL=0.1;
 	if(T<=T_c )
 		HL=1000.*(1-0.006468*T)/(0.003909-0.000022*T);
+	// cout<<" HL = "<<HL<<endl;
+	return HL;
+}
+
+double GetVapHeat(double T){
+	double HL=0.1;
+	double T_c = 154.77;
+	if(T<=T_c )
+		HL=1000.*(1-0.006468*T)/(0.003909-0.000022*T);
+	// cout<<" HL = "<<HL<<endl;
 	return HL;
 }
 /******************Расчет кси************************/
 double Evaporation::GetXi(double T){
 	double xi;
+	double alpha = 0.6;   // Параметр альфа нужен для расчета теплоемкости 
+						  // на границе как взвешенной суммы теплоекости кислорода и водорода 
 	// double Cpe 	=	GetCp_mixt_ex();
 	// double Cpw 	=	GetCp_mixt_w();
-	double Cpe 	=	7950.;
-	double Cpw 	=	7950.;
+	double Cpe;
+	double Cpw;
+	Cpe = Cpw = Cp[H2] * alpha + Cp[O2] * (1 - alpha);
 	double HL	=	GetVapHeat(T);
 	if(DEBUG) cout<<"GetXi:"<<(Cpe*T_ex-Cpw*T)<<" "<<(HL+Cpw*(T-T_av))<<" HL="<<HL<<endl;
 	xi=log(1.+(Cpe*T_ex-Cpw*T)/(HL+Cpw*(T-T_av)));
 	return xi;
 }
 
-/*********Расчет дисбаланса уравнения для температуры*******/
-double Evaporation::GetDelta(double T){
-	// if(T<0.) T=0.;
-	// if (T>1000.) T=1000.;
-	double delta;
-	double xi     = GetXi(T);
-	double exi    = exp(-xi);
+
+void Evaporation::GetConc(double xi){
+	double exi = exp(-xi);
 	for (int i = 0; i < CN; ++i){
 		if(i!=O2) Y_w[i] = Y_ex[i] * exi;
 		else Y_w[i] = 1 - (1 - Y_ex[i]) * exi;
@@ -118,9 +127,19 @@ double Evaporation::GetDelta(double T){
 			cout<<Y_ex[i]<<endl;
 		}
 	}
+}
+
+/*********Расчет дисбаланса уравнения для температуры*******/
+double Evaporation::GetDelta(double T){
+	// if(T<0.) T=0.;
+	// if (T>T_c) T=T_c;
+	double delta;
+	double xi     = GetXi(T);
+	double exi    = exp(-xi);
+	GetConc(xi);
 	double Y_O2_w = 1 - (1 - Y_ex[O2])*exi;
 	double mu_e   = GetMolarMassEx();
-	// double IN     = 5.1;											// IN - внешний параметр и его надо бы посчитать.
+	// double IN     = 5.1;										// IN - внешний параметр и его надо бы посчитать.
 	double Cpe    = GetCp_mixt_ex();
 	double Cpw    = GetCp_mixt_w();
 	double Gamma  = 1.;											// Эту гамму нужно посчитать, хотя вроде бы она примерно равна 1
@@ -177,7 +196,15 @@ int Evaporation::SolveNewton(){
 		cout<<".";
 	}while(fabs(T_next-T_prev) > a_tol );
 	cout<<endl;
-	T_w = T_next;
+
+	if(T_next<T_c)
+		T_w = T_next;
+	else if(T_next>=T_c){
+		T_w = T_c;
+		GetConc(GetXi(T_w));
+	}
+
+	Peclet = GetXi(T_w);
 	return iter;
 }
 
@@ -193,35 +220,64 @@ int main(int argc, char  *argv[])
 {	
 	ofstream out;
 	out.open("out.txt");
-	out.precision(5);
+	// out.precision(5);
 	 	
 	out<<endl;
 	int CN = 9;
 	double * Ye=new double[CN];
 		for (int i = 0; i < CN; ++i)
 		{
-			if(i == O2) Ye[i] = 0.2;
-			else if(i == H2) Ye[i] = 0.8;
+			if(i == O2) Ye[i] = 0.3;
+			else if(i == H2) Ye[i] = 0.7;
 			else Ye[i] = 0;
 		}
 
-	double Te = 170., Pe = 5066250, Tav = 90.;
+	double Te = 170., Pe = 15.e5, Tav = 60.;
+	double T_boil = 91.;
+	double Cp = 4046.;
+	double HL = GetVapHeat(T_boil);
+	double exi_boil = 1./(1.+(Cp*Te-Cp*T_boil)/(HL+Cp*(T_boil-Tav)));
+	//**********************************//
+	double Y_H2_boil = Ye[H2] * exi_boil;
+	double Y_O2_boil = 1 - (1 - Ye[O2]) * exi_boil; 
+	out<<"Y_H2_boil = " << Y_H2_boil<<"\t Y_O2_boil = "<< Y_O2_boil << endl;
+	// ******************************** //
+	// ********* Шапка вывода *******  //
+	out<<""<<setw(3)<<"In";
+		// out.width(9);
+		out<<"\t"<<setw(5)<<"T_w";
+		out<<"\t"<<setw(5)<<"Te";
+		out<<"\t"<<setw(6)<<"Peclet";
+		 // out.width(7);
+		string ConcName[EC] = {"H2","O2","N2","H2O","OH","H","O","HO2","H2O2"};
 
-	for (double In = 0.; In < 1000.; In += 1.){
-		Evaporation dropplet(Ye, Te, Pe, Tav,In);
-		int iter = dropplet.SolveNewton();
-		cout<<"In "<<iter <<" iterations we`ve got T equal to "<<dropplet.T_w<<endl;
-		out.width(4);
-		out<<""<<In;
-		out.width(8);
-		out<<"\t"<<dropplet.T_w<<"\t";
-		out<<"\t"<<Te<<"\t";
-		// out.width(7);
 		for (int i = 0; i < CN; ++i){
-			// out.precision(3);
-			 out.width(4);	
+			 // out.precision(3);
+			 // out.width(4);	
+			// enum{H2,O2,N2,H2O,OH,H,O,HO2,H2O2,	EC}; 
 
-			out<< dropplet.Y_w[i]<<"\t";
+			out<<"\t"<<setw(3)<< "["<<ConcName[i]<<"]";
+		}
+		out<<endl<<endl;
+	// ***************************** //
+
+	for (double In = 0.; In < 100.; In += 1.){
+		Evaporation droplet(Ye, Te, Pe, Tav,In);
+		int iter = droplet.SolveNewton();
+		cout<<"In "<<iter <<" iterations we`ve got T equal to "<<droplet.T_w<<endl;
+		// out.width(4);
+		 out.precision(4);
+		out<<""<<setw(3)<<In;
+		// out.width(9);
+		out<<"\t"<<setw(5)<<droplet.T_w;
+		out<<"\t"<<setw(5)<<Te;
+		out<<"\t"<<setw(6)<<droplet.Peclet;
+		 // out.width(7);
+		for (int i = 0; i < CN; ++i){
+			 // out.precision(3);
+			  // out.width(6);	
+
+			out<<"\t"<<setw(6)<< droplet.Y_w[i];
 		}
 		out<<endl;
 	}

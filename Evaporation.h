@@ -17,7 +17,6 @@ private:
 	double IN;			// Параметр неравновесности
 
 	
-	double Peclet;		// Число Пекле
 
 	/************** FUNCTIONS **************/
 	double GetCp_mixt_ex(); 		// Расчет теплоемкости смеси на бесконечности
@@ -27,10 +26,13 @@ private:
 	double GetDelta(double T);		// Расчет дисбаланса уравнения, которое решаем методом Ньютона. В функцию передается температура на шаге метода Ньютона
 	double GetO2PartPres(double T);	// Расчет парциального давления паров кислорода на границе капли в зависимости от температуры
 	double GetMolarMassEx();		// Расчет молярной массы внешней смеси
+	void GetConc(double xi);		// Расчет концентраций для заданного значения xi
 
 public:
 	double T_w;			// Температура на границе
 	double * Y_w;		// Массив концентраций на границе
+	double Peclet;		// Число Пекле
+		
 	Evaporation(double * ExtConc, double ExtTemp, double ExtPres, double T_dropplet, double In);
 	~Evaporation();
 	int	SolveNewton();		// Расчет температуры методом Ньютона; возвращает число итераций
